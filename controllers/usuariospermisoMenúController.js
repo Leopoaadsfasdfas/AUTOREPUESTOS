@@ -1,15 +1,20 @@
 const db = require('../db');
 
 exports.permisos = async (req, res) => {
-  const { id_usuario_e} = req.body;
+  const { id_usuario_e } = req.body; // "347"
   try {
-    const [rows] = await db.query('CALL sp_menu_usuario(?)', [
-      id_usuario_e
-    ]);
+    const [rows] = await db.query('CALL sp_menu_usuario(?)', [id_usuario_e]);
 
-    // Devuelve la misma información enviada, incluido el 'id' generado automáticamente
-    const permisos = rows[0][0]; // El primer elemento del resultado del CALL
-    res.json(permisos);
+    // rows[0] es el ARRAY de filas devuelto por el SELECT del SP
+    const permisos = rows[0];
+
+    // si quieres, valida que realmente sea un array
+    if (Array.isArray(permisos)) {
+      return res.json(permisos);
+    } else {
+      // fallback por si el driver te cambia el shape
+      return res.json(rows);
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
