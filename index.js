@@ -13,6 +13,8 @@ const subirimagen = require('./routes/imagenCloud'); // Aquí importas la ruta d
 const horario = require('./routes/horario_route'); // Aquí importas la ruta de imagen
 const historial_favorito = require('./routes/favorito_historial_routes'); // Aquí importas la ruta de imagen
 const usuariospermisosController = require('./routes/usuariosPermisos'); // Aquí importas la ruta de imagen
+const menus = require('./routes/menus'); // Aquí importas la ruta de imagen
+const rolMenu = require('./routes/rolMenu'); // Aquí importas la ruta de imagen
 
 const port = process.env.PORT || 3000; 
 // Configurar CORS (si lo necesitas)
@@ -23,6 +25,11 @@ app.use(express.json());
 // Usar los routers para cada ruta
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/permisos', usuariospermisosController);
+// Rutas
+app.use('/api/menus', menus);
+app.use('/api', rolMenu); // expone /api/roles/... y /api/permisos/usuario/...
+
+
 app.use('/api', categoriasRoutes); // Ahora tu ruta final será /api/categorias
 app.use('/api/subcategoria', subcategoriaRoutes);
 app.use('/api/categoria_subcategoria', categoria_subcategoria);
