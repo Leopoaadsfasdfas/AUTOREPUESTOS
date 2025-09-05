@@ -25,21 +25,30 @@ exports.obtenerRol = async (req, res) => {
  * - rolId: obligatorio
  * - onlyViewable: 1 para filtrar solo visibles (opcional)
  */
+// POST /api/rol_menu/roles  (body JSON)
 exports.obtenerPermisosRol = async (req, res) => {
-    const { codigo,tipo } = req.body;
- try {
-    const [rows] = await db.query('CALL sp_rol_menu_get(?,?)', [codigo,tipo ]);
+  try {
+    // Acepta cualquiera de estas claves en el body:
+    // { rolId }  o  { codigo }  o  { CODIGO }
+    const rawRol = req.body?.rolId ?? req.body?.codigo ?? req.body?.CODIGO;
 
-    // Verificamos si no se encontró la categoría
-    if (rows[0][0]?.estado === 'ROL_MENÚ') {
-      return res.status(404).json({ mensaje: 'Rol MENÚ No encontrado.' });
+    const rawOnly = req.body?.onlyViewable ?? req.body?.tipo ?? req.body?.TIPO;
+
+    const rolId = Number(rawRol);
+    if (!rolId || Number.isNaN(rolId)) {
+      return res.status(400).json({ error: 'rolId/codigo inválido' });
     }
 
-    res.json(rows[0]); // Primer conjunto de resultados del CALL
+    // En el SP: NULL = sin filtro; 1 = solo visibles
+    const onlyViewable = Number(rawOnly) === 1 ? 1 : null;
+
+    const [rows] = await db.query('CALL sp_rol_menu_get(?, ?)', [rolId, onlyViewable]);
+
+    // El SP no devuelve "estado", así que no hagas chequeos de estado aquí
+    return res.json(rows[0] || []);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
-   
 };
 
 
