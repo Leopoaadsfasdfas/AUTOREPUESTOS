@@ -11,9 +11,9 @@ router.post('/roles', verificarToken, rolMenuController.obtenerPermisosRol);
 router.post('/rolobtener', verificarToken, rolMenuController.obtenerRol);
 
 // Actualizar (todo en body)
-router.post('/registrar', verificarToken, rolMenuController.registrarRolMenú);
+router.post('/registrar', verificarToken, rolMenuController.registrarRolMenu);
 
 // Actualizar (todo en body)
-router.post('/eliminar', verificarToken, rolMenuController.eliminarRolMenú);
+router.post('/eliminar', verificarToken, rolMenuController.eliminarRolMenu);
 
 module.exports = router;
