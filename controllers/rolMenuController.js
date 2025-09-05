@@ -80,7 +80,7 @@ exports.eliminarRolMenu = async (req, res) => {
 exports.consultarRolmenu = async (req, res) => {
   const { id_usuario_e } = req.body; // "347"
   try {
-    const [rows] = await db.query('CALL sp_menu_usuario(?)', [id_usuario_e]);
+    const [rows] = await db.query('CALL sp_menu_rol(?)', [id_usuario_e]);
 
     // rows[0] es el ARRAY de filas devuelto por el SELECT del SP
     const permisos = rows[0];
@@ -95,4 +95,4 @@ exports.consultarRolmenu = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
+}; 
