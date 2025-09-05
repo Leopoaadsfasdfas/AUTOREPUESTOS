@@ -7,5 +7,7 @@ const verificarToken = require('../middlewares/verificarToken'); // ✅ Importa 
 //router.post('/buscar/perfiles',verificarToken, usuariosController.buscarusuarioUbicacion);   // ✅ GET usuario por ID (ESTA ES LA CLAVE)
 router.post('/',verificarToken, usuariospermisosController.permisos);   // ✅ GET usuario por ID (ESTA ES LA CLAVE)
 router.post('/rol',verificarToken, usuariospermisosController.usuarioRolinsert);   // ✅ GET usuario por ID (ESTA ES LA CLAVE)
+router.post('/update',verificarToken, usuariospermisosController.updateusuario);   // ✅ GET usuario por ID (ESTA ES LA CLAVE)
+router.post('/update',verificarToken, usuariospermisosController.deleterolusuario);   // ✅ GET usuario por ID (ESTA ES LA CLAVE)
 
 module.exports = router;
