@@ -60,39 +60,41 @@ exports.crearMenu = async (req, res) => {
 exports.actualizarMenu = async (req, res) => {
   try {
     const {
-      id = null,            // solo para buscar; NO se actualiza
-      clave_buscar = null,  // solo para buscar si no hay id
-      clave = null,         // NUEVA clave (opcional)
-      titulo = null,
-      url = null,
-      icono = null,
-      padre_id = null,      // manda null para limpiar
-      orden = null,
-      activo = null
+      id,        // obligatorio, no se actualiza
+      clave,
+      titulo,
+      url,
+      icono,
+      padre_id,
+      orden,
+      activo
     } = req.body;
 
-    if ((id == null || Number.isNaN(Number(id))) &&
-        (clave_buscar == null || String(clave_buscar).trim() === '')) {
-      return res.status(400).json({ error: 'Debes enviar id o clave_buscar para localizar el menú' });
+    // Validar que se envió el id
+    if (id === undefined || id === null || isNaN(Number(id))) {
+      return res.status(400).json({ error: "Debes enviar un id válido para actualizar el menú" });
     }
 
-    const p_id = id == null ? null : Number(id);
+    const p_id = Number(id);
 
+    // Llamada al procedimiento almacenado simple
     const [rows] = await db.query(
-      'CALL sp_menus_update(?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [p_id, clave_buscar, clave, titulo, url, icono, padre_id, orden, activo]
+      "CALL sp_menus_update_simple(?, ?, ?, ?, ?, ?, ?, ?)",
+      [p_id, clave || null, titulo || null, url || null, icono || null, padre_id, orden, activo]
     );
 
     const out = rows?.[0]?.[0] || {};
+
     return res.json({
       ok: true,
-      id_actualizado: out.id_actualizado ?? null,
       filas_afectadas: out.filas_afectadas ?? 0
     });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    console.error("Error en actualizarMenu:", err);
+    return res.status(500).json({ error: "Error interno del servidor" });
   }
 };
+
 
 
 
