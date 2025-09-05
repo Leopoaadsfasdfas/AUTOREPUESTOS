@@ -1,21 +1,23 @@
 // controllers/rolMenuController.js
 const db = require('../db');
+
+
 //Consulta Rol
 exports.obtenerRol = async (req, res) => {
-  try {
     const { codigo } = req.body;
+ try {
+    const [rows] = await db.query('CALL sp_roles_get(?)', [codigo]);
 
-    // Si no viene código o viene vacío, pasamos null al SP para traer todos
-    const p_codigo =
-      codigo === undefined || codigo === null || String(codigo).trim() === ''
-        ? null
-        : String(codigo).trim();
+    // Verificamos si no se encontró la categoría
+    if (rows[0][0]?.estado === 'ROL_NO_ENCONTRADO') {
+      return res.status(404).json({ mensaje: 'Categoría no encontrada.' });
+    }
 
-    const [rows] = await db.query('CALL sp_roles_get(?)', [p_codigo]);
-    return res.json(rows[0]);
+    res.json(rows[0]); // Primer conjunto de resultados del CALL
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
+   
 };
 /**
  * GET /api/rol-menu
