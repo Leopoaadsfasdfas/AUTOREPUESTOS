@@ -7,18 +7,26 @@ const db = require('../db');
  * - id: si lo especificas, trae solo ese menú
  * - activo: 1|0 para filtrar (solo aplica si no hay id)
  */
-exports.obtenerMenus = async (req, res) => {
-  try {
-    const p_id = req.query.id ? Number(req.query.id) : null;
-    const p_activo = (req.query.activo === undefined) ? null : Number(req.query.activo);
 
-    const [rows] = await db.query('CALL sp_menus_get(?, ?)', [p_id, p_activo]);
-    // sp_menus_get retorna un SELECT → queda en rows[0]
-    return res.json(rows[0]);
+   
+
+exports.obtenerMenus = async (req, res) => {
+    const { p_id,p_activo } = req.body;
+
+ try {
+    const [rows] = await db.query('CALL sp_menus_get(?,?)', [  p_id,p_activo  ]);
+
+    // Verificamos si no se encontró la categoría
+    if (rows[0][0]?.estado === 'ROL_MENÚ') {
+      return res.status(404).json({ mensaje: 'mensaje.' });
+    }
+
+    res.json(rows[0]); // Primer conjunto de resultados del CALL
   } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
+    res.status(500).json({ error: err.message });
+  }   
 };
+
 
 /**
  * POST /api/menus
