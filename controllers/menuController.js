@@ -102,37 +102,18 @@ exports.actualizarMenu = async (req, res) => {
  * DELETE /api/menus/:id
  * Query: ?soft=1   (default: 1 → soft delete; 0 → delete duro)
  */
-// DELETE /api/menus  (id solo en el body JSON)
 exports.eliminarMenu = async (req, res) => {
   try {
-    // Rechazar si vienen id en params o query (solo body permitido)
-    if (req.params?.id || req.query?.id) {
-      return res.status(400).json({ error: 'Envíe el id únicamente en el body (JSON).' });
-    }
+    const p_id = Number(req.body.id);
 
-    // Verificar Content-Type y presencia de body
-    if (!req.is('application/json')) {
-      return res.status(415).json({ error: 'Content-Type debe ser application/json' });
-    }
-
-    const rawId = req.body?.id;
-    const p_id = Number(rawId);
-
-    // Validación de id (numérico entero positivo)
-    if (
-      rawId === undefined ||
-      rawId === null ||
-      Number.isNaN(p_id) ||
-      !Number.isInteger(p_id) ||
-      p_id <= 0
-    ) {
+    if (!p_id) {
       return res.status(400).json({ error: 'id inválido' });
     }
 
     const [rows] = await db.query('CALL sp_menus_delete(?)', [p_id]);
     const out = rows?.[0]?.[0] || {};
 
-    return res.json({
+    res.json({
       ok: true,
       filas_afectadas: out.filas_afectadas ?? 0
     });
@@ -146,7 +127,7 @@ exports.eliminarMenu = async (req, res) => {
       return res.status(404).json({ error: 'Menu no existe' });
     }
 
-    return res.status(500).json({ error: msg });
+    res.status(500).json({ error: msg });
   }
 };
 
