@@ -104,19 +104,32 @@ exports.actualizarMenu = async (req, res) => {
  */
 exports.eliminarMenu = async (req, res) => {
   try {
-    const p_id = Number(req.params.id);
-    if (!p_id) return res.status(400).json({ error: 'id inválido' });
+    const p_id = Number(req.body.id);
+    if (!p_id) {
+      return res.status(400).json({ error: 'id inválido' });
+    }
 
-    const p_soft = req.query.soft === '0' ? 0 : 1;
+    const [rows] = await db.query('CALL sp_menus_delete(?)', [p_id]);
+    const out = rows?.[0]?.[0] || {};
 
-    const [rows] = await db.query('CALL sp_menus_delete(?, ?)', [p_id, p_soft]);
-    // sp_menus_delete → SELECT ROW_COUNT() AS filas_afectadas;
-    const out = rows[0]?.[0] || {};
-    return res.json({ ok: true, filas_afectadas: out.filas_afectadas ?? 0, soft: Boolean(p_soft) });
+    return res.json({
+      ok: true,
+      filas_afectadas: out.filas_afectadas ?? 0
+    });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    const msg = err?.sqlMessage || err?.message || 'Error interno';
+
+    if (msg.includes('no es posible eliminar posee submenus')) {
+      return res.status(409).json({ error: 'no es posible eliminar posee submenus' });
+    }
+    if (msg.includes('Menu no existe')) {
+      return res.status(404).json({ error: 'Menu no existe' });
+    }
+
+    return res.status(500).json({ error: msg });
   }
 };
+
 
 /**
  * POST /api/menus/:id/restore
