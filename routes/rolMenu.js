@@ -8,7 +8,7 @@ const rolMenuController = require('../controllers/rolMenuController');
 // Consultar permisos de un rol
 router.post('/roles', verificarToken, rolMenuController.obtenerPermisosRol);
 // Consultar rol 
-router.post('/consultarol', verificarToken, rolMenuController.obtenerPermisosRol);
+router.post('/rolobtener', verificarToken, rolMenuController.obtenerRol);
 // Asignar/actualizar permiso por clave
 router.post('/', verificarToken, rolMenuController.setPermisoByClave);
 

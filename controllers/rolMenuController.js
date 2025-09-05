@@ -10,7 +10,7 @@ exports.obtenerRol = async (req, res) => {
 
     // Verificamos si no se encontró la categoría
     if (rows[0][0]?.estado === 'ROL_NO_ENCONTRADO') {
-      return res.status(404).json({ mensaje: 'Categoría no encontrada.' });
+      return res.status(404).json({ mensaje: 'Rol No encontrado.' });
     }
 
     res.json(rows[0]); // Primer conjunto de resultados del CALL
