@@ -23,7 +23,7 @@ exports.permisos = async (req, res) => {
 exports.usuarioRolinsert = async (req, res) => {
   const { usuario,rol } = req.body; // "347"
   try {
-    const [rows] = await db.query('CALL sp_usuario_rol_insert(?)', [usuario,rol]);
+    const [rows] = await db.query('CALL sp_usuario_rol_insert(?,?)', [usuario,rol]);
 
     // rows[0] es el ARRAY de filas devuelto por el SELECT del SP
     const permisos = rows[0];
