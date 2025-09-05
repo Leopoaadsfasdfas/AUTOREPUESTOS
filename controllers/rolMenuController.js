@@ -78,21 +78,18 @@ exports.eliminarRolMenu = async (req, res) => {
 };
 
 exports.consultarRolmenu = async (req, res) => {
-  const { id_usuario_e } = req.body; // "347"
-  try {
-    const [rows] = await db.query('CALL sp_menu_rol(?)', [id_usuario_e]);
+    const { id_usuario_e } = req.body;
+ try {
+    const [rows] = await db.query('CALL sp_menu_rol(?)', [ id_usuario_e  ]);
 
-    // rows[0] es el ARRAY de filas devuelto por el SELECT del SP
-    const permisos = rows[0];
-
-    // si quieres, valida que realmente sea un array
-    if (Array.isArray(permisos)) {
-      return res.json(permisos);
-    } else {
-      // fallback por si el driver te cambia el shape
-      return res.json(rows);
+    // Verificamos si no se encontró la categoría
+    if (rows[0][0]?.estado === 'ROL_MENÚ') {
+      return res.status(404).json({ mensaje: 'mensaje.' });
     }
+
+    res.json(rows[0]); // Primer conjunto de resultados del CALL
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}; 
+   
+};

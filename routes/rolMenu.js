@@ -4,6 +4,7 @@ const router = express.Router();
 const verificarToken = require('../middlewares/verificarToken');
 
 const rolMenuController = require('../controllers/rolMenuController');
+
 router.post('/consultar',verificarToken, rolMenuController.consultarRolmenu);   // ✅ GET usuario por ID (ESTA ES LA CLAVE)
 // Consultar permisos de un rol
 router.post('/roles', verificarToken, rolMenuController.obtenerPermisosRol);
