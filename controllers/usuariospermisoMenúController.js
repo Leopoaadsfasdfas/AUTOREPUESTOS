@@ -63,7 +63,7 @@ exports.updateusuario = async (req, res) => {
 exports.deleterolusuario = async (req, res) => {
   const { usuario,rol } = req.body; // "347"
   try {
-    const [rows] = await db.query('CALL sp_usuario_rol_delete_by_usuario(?,?)', [usuario,rol]);
+    const [rows] = await db.query('CALL sp_usuario_rol_delete_by_usuario(?)', [usuario,rol]);
 
     // rows[0] es el ARRAY de filas devuelto por el SELECT del SP
     const permisos = rows[0];
