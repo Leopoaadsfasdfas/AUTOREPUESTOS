@@ -6,7 +6,7 @@ const verificarToken = require('../middlewares/verificarToken');
 const menusController = require('../controllers/menuController');
 
 // Listar / obtener uno (query ?id= &activo=)
-router.get('/', verificarToken, menusController.obtenerMenus);
+router.post('/all', verificarToken, menusController.obtenerMenus);
 
 // Crear
 router.post('/', verificarToken, menusController.crearMenu);
