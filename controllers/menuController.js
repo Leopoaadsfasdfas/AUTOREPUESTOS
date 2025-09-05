@@ -59,10 +59,8 @@ exports.crearMenu = async (req, res) => {
  */
 exports.actualizarMenu = async (req, res) => {
   try {
-    const p_id = Number(req.params.id);
-    if (!p_id) return res.status(400).json({ error: 'id inválido' });
-
     const {
+      id,            // ahora el id viene en el body
       clave = null,
       titulo = null,
       url = null,
@@ -71,6 +69,11 @@ exports.actualizarMenu = async (req, res) => {
       orden = null,
       activo = null
     } = req.body;
+
+    const p_id = Number(id);
+    if (!p_id) {
+      return res.status(400).json({ error: 'id inválido' });
+    }
 
     const [rows] = await db.query(
       'CALL sp_menus_update(?, ?, ?, ?, ?, ?, ?, ?)',
@@ -84,6 +87,7 @@ exports.actualizarMenu = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
+
 
 /**
  * DELETE /api/menus/:id
