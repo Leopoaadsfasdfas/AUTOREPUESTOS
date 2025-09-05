@@ -26,7 +26,7 @@ exports.obtenerRol = async (req, res) => {
  * - onlyViewable: 1 para filtrar solo visibles (opcional)
  */
 exports.obtenerPermisosRol = async (req, res) => {
-    const { codigoipo } = req.body;
+    const { codigo } = req.body;
  try {
     const [rows] = await db.query('CALL sp_rol_menu_get(?)', [codigo ]);
 
