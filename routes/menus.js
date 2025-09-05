@@ -11,8 +11,8 @@ router.get('/', verificarToken, menusController.obtenerMenus);
 // Crear
 router.post('/', verificarToken, menusController.crearMenu);
 
-// Actualizar
-router.put('/:id', verificarToken, menusController.actualizarMenu);
+// Actualizar (todo en body)
+router.put('/', verificarToken, menusController.actualizarMenu);
 
 // Borrar (soft por defecto; ?soft=0 para delete duro)
 router.delete('/:id', verificarToken, menusController.eliminarMenu);
