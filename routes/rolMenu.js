@@ -12,6 +12,8 @@ router.post('/rolobtener', verificarToken, rolMenuController.obtenerRol);
 
 // Actualizar (todo en body)
 router.post('/registrar', verificarToken, rolMenuController.registrarRolMenu);
+// Actualizar (todo en body)
+router.post('/actualizar', verificarToken, rolMenuController.actualizarRolMenu);
 
 // Actualizar (todo en body)
 router.post('/eliminar', verificarToken, rolMenuController.eliminarRolMenu);

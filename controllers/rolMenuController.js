@@ -58,7 +58,9 @@ exports.registrarRolMenu = async (req, res) => {
   }
    
 };
-exports.eliminarRolMenu= async (req, res) => {
+
+
+exports.eliminarRolMenu = async (req, res) => {
     const { rol,menu,view } = req.body;
  try {
     const [rows] = await db.query('CALL sp_rol_menu_delete(?,?,?)', [ rol,menu,view  ]);
@@ -74,3 +76,4 @@ exports.eliminarRolMenu= async (req, res) => {
   }
    
 };
+
