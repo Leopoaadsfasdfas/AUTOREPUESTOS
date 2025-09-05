@@ -27,7 +27,7 @@ app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/permisos', usuariospermisosController);
 // Rutas
 app.use('/api/menus', menus);
-app.use('/api', rolMenu); // expone /api/roles/... y /api/permisos/usuario/...
+app.use('/api/rol_menu', rolMenu); // expone /api/roles/... y /api/permisos/usuario/...
 
 
 app.use('/api', categoriasRoutes); // Ahora tu ruta final será /api/categorias

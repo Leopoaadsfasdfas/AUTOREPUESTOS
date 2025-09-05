@@ -131,20 +131,3 @@ exports.eliminarMenu = async (req, res) => {
   }
 };
 
-
-/**
- * POST /api/menus/:id/restore
- */
-exports.restaurarMenu = async (req, res) => {
-  try {
-    const p_id = Number(req.params.id);
-    if (!p_id) return res.status(400).json({ error: 'id inválido' });
-
-    const [rows] = await db.query('CALL sp_menus_restore(?)', [p_id]);
-    // sp_menus_restore → SELECT ROW_COUNT() AS filas_afectadas;
-    const out = rows[0]?.[0] || {};
-    return res.json({ ok: true, filas_afectadas: out.filas_afectadas ?? 0 });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-};

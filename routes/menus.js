@@ -17,7 +17,4 @@ router.put('/', verificarToken, menusController.actualizarMenu);
 // Borrar (soft por defecto; ?soft=0 para delete duro)
 router.delete('/', verificarToken, menusController.eliminarMenu);
 
-// Restaurar (activo=1)
-router.post('/:id/restore', verificarToken, menusController.restaurarMenu);
-
 module.exports = router;

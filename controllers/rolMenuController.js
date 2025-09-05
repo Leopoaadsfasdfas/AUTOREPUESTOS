@@ -2,112 +2,172 @@
 const db = require('../db');
 
 /**
- * GET /api/roles/:rolId/permisos
- * Opcional: ?onlyViewable=1
+ * GET /api/rol-menu
+ * Query: ?rolId=123&onlyViewable=1
+ * - rolId: obligatorio
+ * - onlyViewable: 1 para filtrar solo visibles (opcional)
  */
 exports.obtenerPermisosRol = async (req, res) => {
   try {
-    const rolId = Number(req.params.rolId);
-    if (!rolId) return res.status(400).json({ error: 'rolId inválido' });
+    const { rolId, onlyViewable } = req.body;
 
-    const onlyViewable = req.query.onlyViewable === '1' ? 1 : null;
+    if (!rolId || isNaN(Number(rolId))) {
+      return res.status(400).json({ error: 'rolId inválido' });
+    }
 
-    const [rows] = await db.query('CALL sp_rol_menu_get(?, ?)', [rolId, onlyViewable]);
-    // SELECT ... → rows[0]
+    const p_rolId = Number(rolId);
+    const p_onlyViewable =
+      onlyViewable === undefined || onlyViewable === null
+        ? null
+        : Number(onlyViewable) === 1
+        ? 1
+        : null;
+
+    const [rows] = await db.query('CALL sp_rol_menu_get(?, ?)', [p_rolId, p_onlyViewable]);
     return res.json(rows[0]);
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
 };
 
+
 /**
- * POST /api/roles/:rolId/permisos/by-clave
- * body: { clave, can_view }
+ * POST /api/rol-menu/by-clave
+ * body: { rolId, clave, can_view }
  */
 exports.setPermisoByClave = async (req, res) => {
   try {
-    const rolId = Number(req.params.rolId);
-    if (!rolId) return res.status(400).json({ error: 'rolId inválido' });
+    const { rolId, clave, can_view = 1 } = req.body;
 
-    const { clave, can_view = 1 } = req.body;
-    if (!clave) return res.status(400).json({ error: 'clave es obligatoria' });
+    if (!rolId || isNaN(Number(rolId))) {
+      return res.status(400).json({ error: 'rolId inválido' });
+    }
+    if (!clave) {
+      return res.status(400).json({ error: 'clave es obligatoria' });
+    }
 
-    const [rows] = await db.query('CALL sp_rol_menu_set_by_clave(?, ?, ?)', [rolId, clave, Number(can_view)]);
+    const [rows] = await db.query(
+      'CALL sp_rol_menu_set_by_clave(?, ?, ?)',
+      [Number(rolId), clave, Number(can_view)]
+    );
+
     const out = rows[0]?.[0] || {};
-    return res.json({ ok: true, filas_afectadas: out.filas_afectadas ?? 0, clave, can_view: Number(can_view) });
+    return res.json({
+      ok: true,
+      filas_afectadas: out.filas_afectadas ?? 0,
+      clave,
+      can_view: Number(can_view)
+    });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
 };
 
 /**
- * POST /api/roles/:rolId/permisos
- * body: { menu_id, can_view }
+ * POST /api/rol-menu
+ * body: { rolId, menu_id, can_view }
  */
 exports.setPermiso = async (req, res) => {
   try {
-    const rolId = Number(req.params.rolId);
-    if (!rolId) return res.status(400).json({ error: 'rolId inválido' });
+    const { rolId, menu_id, can_view = 1 } = req.body;
 
-    const { menu_id, can_view = 1 } = req.body;
-    if (!menu_id) return res.status(400).json({ error: 'menu_id es obligatorio' });
+    if (!rolId || isNaN(Number(rolId))) {
+      return res.status(400).json({ error: 'rolId inválido' });
+    }
+    if (!menu_id || isNaN(Number(menu_id))) {
+      return res.status(400).json({ error: 'menu_id es obligatorio' });
+    }
 
-    const [rows] = await db.query('CALL sp_rol_menu_set(?, ?, ?)', [rolId, Number(menu_id), Number(can_view)]);
+    const [rows] = await db.query(
+      'CALL sp_rol_menu_set(?, ?, ?)',
+      [Number(rolId), Number(menu_id), Number(can_view)]
+    );
+
     const out = rows[0]?.[0] || {};
-    return res.json({ ok: true, filas_afectadas: out.filas_afectadas ?? 0, menu_id: Number(menu_id), can_view: Number(can_view) });
+    return res.json({
+      ok: true,
+      filas_afectadas: out.filas_afectadas ?? 0,
+      menu_id: Number(menu_id),
+      can_view: Number(can_view)
+    });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
 };
 
 /**
- * DELETE /api/roles/:rolId/permisos/by-clave/:clave
+ * DELETE /api/rol-menu/by-clave
+ * body: { rolId, clave }
  */
 exports.eliminarPermisoByClave = async (req, res) => {
   try {
-    const rolId = Number(req.params.rolId);
-    const { clave } = req.params;
-    if (!rolId) return res.status(400).json({ error: 'rolId inválido' });
-    if (!clave) return res.status(400).json({ error: 'clave es obligatoria' });
+    const { rolId, clave } = req.body;
 
-    const [rows] = await db.query('CALL sp_rol_menu_delete_by_clave(?, ?)', [rolId, clave]);
+    if (!rolId || isNaN(Number(rolId))) {
+      return res.status(400).json({ error: 'rolId inválido' });
+    }
+    if (!clave) {
+      return res.status(400).json({ error: 'clave es obligatoria' });
+    }
+
+    const [rows] = await db.query(
+      'CALL sp_rol_menu_delete_by_clave(?, ?)',
+      [Number(rolId), clave]
+    );
+
     const out = rows[0]?.[0] || {};
-    return res.json({ ok: true, filas_afectadas: out.filas_afectadas ?? 0, clave });
+    return res.json({
+      ok: true,
+      filas_afectadas: out.filas_afectadas ?? 0,
+      clave
+    });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
 };
 
 /**
- * DELETE /api/roles/:rolId/permisos/:menuId
+ * DELETE /api/rol-menu
+ * body: { rolId, menu_id }
  */
 exports.eliminarPermiso = async (req, res) => {
   try {
-    const rolId = Number(req.params.rolId);
-    const menuId = Number(req.params.menuId);
-    if (!rolId) return res.status(400).json({ error: 'rolId inválido' });
-    if (!menuId) return res.status(400).json({ error: 'menuId inválido' });
+    const { rolId, menu_id } = req.body;
 
-    const [rows] = await db.query('CALL sp_rol_menu_delete(?, ?)', [rolId, menuId]);
+    if (!rolId || isNaN(Number(rolId))) {
+      return res.status(400).json({ error: 'rolId inválido' });
+    }
+    if (!menu_id || isNaN(Number(menu_id))) {
+      return res.status(400).json({ error: 'menu_id inválido' });
+    }
+
+    const [rows] = await db.query(
+      'CALL sp_rol_menu_delete(?, ?)',
+      [Number(rolId), Number(menu_id)]
+    );
+
     const out = rows[0]?.[0] || {};
-    return res.json({ ok: true, filas_afectadas: out.filas_afectadas ?? 0, menuId });
+    return res.json({
+      ok: true,
+      filas_afectadas: out.filas_afectadas ?? 0,
+      menu_id: Number(menu_id)
+    });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
 };
 
 /**
- * (Opcional) GET /api/permisos/usuario/:idUsuario
- * Usa el SP que devuelve el árbol permitido para un usuario
+ * GET /api/rol-menu/usuario
+ * Query: ?idUsuario=123
  */
 exports.menuPermitidoUsuario = async (req, res) => {
   try {
-    const idUsuario = Number(req.params.idUsuario);
+    const idUsuario = Number(req.query.idUsuario);
     if (!idUsuario) return res.status(400).json({ error: 'idUsuario inválido' });
 
     const [rows] = await db.query('CALL sp_menu_usuario_por_id(?)', [idUsuario]);
-    const data = rows[0] || [];
-    return res.json(data);
+    return res.json(rows[0] || []);
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
