@@ -42,10 +42,26 @@ exports.obtenerPermisosRol = async (req, res) => {
    
 };
 
-exports.registrarRolMenú = async (req, res) => {
+exports.registrarRolMenu = async (req, res) => {
     const { rol,menu,view } = req.body;
  try {
     const [rows] = await db.query('CALL sp_rol_menu_insert(?,?,?)', [ rol,menu,view  ]);
+
+    // Verificamos si no se encontró la categoría
+    if (rows[0][0]?.estado === 'ROL_MENÚ') {
+      return res.status(404).json({ mensaje: 'mensaje.' });
+    }
+
+    res.json(rows[0]); // Primer conjunto de resultados del CALL
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+   
+};
+exports.eliminarRolMenu= async (req, res) => {
+    const { rol,menu,view } = req.body;
+ try {
+    const [rows] = await db.query('CALL sp_rol_menu_delete(?,?,?)', [ rol,menu,view  ]);
 
     // Verificamos si no se encontró la categoría
     if (rows[0][0]?.estado === 'ROL_MENÚ') {
