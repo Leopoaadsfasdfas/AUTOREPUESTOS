@@ -26,26 +26,20 @@ exports.obtenerRol = async (req, res) => {
  * - onlyViewable: 1 para filtrar solo visibles (opcional)
  */
 exports.obtenerPermisosRol = async (req, res) => {
-  try {
-    const { rolId, onlyViewable } = req.body;
+    const { codigo,tipo } = req.body;
+ try {
+    const [rows] = await db.query('CALL sp_rol_menu_get(?,?)', [codigo,tipo ]);
 
-    if (!rolId || isNaN(Number(rolId))) {
-      return res.status(400).json({ error: 'rolId inválido' });
+    // Verificamos si no se encontró la categoría
+    if (rows[0][0]?.estado === 'ROL_MENÚ') {
+      return res.status(404).json({ mensaje: 'Rol MENÚ No encontrado.' });
     }
 
-    const p_rolId = Number(rolId);
-    const p_onlyViewable =
-      onlyViewable === undefined || onlyViewable === null
-        ? null
-        : Number(onlyViewable) === 1
-        ? 1
-        : null;
-
-    const [rows] = await db.query('CALL sp_rol_menu_get(?, ?)', [p_rolId, p_onlyViewable]);
-    return res.json(rows[0]);
+    res.json(rows[0]); // Primer conjunto de resultados del CALL
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
+   
 };
 
 
