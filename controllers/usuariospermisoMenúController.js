@@ -20,6 +20,25 @@ exports.permisos = async (req, res) => {
   }
 };
 
+exports.permisos_menu = async (req, res) => {
+  const { id_usuario_e } = req.body; // "347"
+  try {
+    const [rows] = await db.query('CALL sp_menu_opciones_usuario(?)', [id_usuario_e]);
+
+    // rows[0] es el ARRAY de filas devuelto por el SELECT del SP
+    const permisos = rows[0];
+
+    // si quieres, valida que realmente sea un array
+    if (Array.isArray(permisos)) {
+      return res.json(permisos);
+    } else {
+      // fallback por si el driver te cambia el shape
+      return res.json(rows);
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 exports.usuarioRolinsert = async (req, res) => {
   const { usuario,rol } = req.body; // "347"
   try {
