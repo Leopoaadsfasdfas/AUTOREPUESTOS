@@ -104,11 +104,18 @@ exports.actualizarMenu = async (req, res) => {
       id,        // obligatorio, no se actualiza
       clave,
       titulo,
-      url,
-      icono,
-      padre_id,
+      icono ,
       orden,
-      activo
+      activo ,
+      default_can_read,
+      default_can_create,
+      default_can_update,
+      default_can_delete,
+      created_at,
+      updated_at,
+      padre_id,
+      ubicacion,
+      url
     } = req.body;
 
     // Validar que se envió el id
@@ -120,8 +127,22 @@ exports.actualizarMenu = async (req, res) => {
 
     // Llamada al procedimiento almacenado simple
     const [rows] = await db.query(
-      "CALL sp_menus_update_simple(?, ?, ?, ?, ?, ?, ?, ?)",
-      [p_id, clave || null, titulo || null, url || null, icono || null, padre_id, orden, activo]
+      "CALL sp_menus_opciones_update_simple(?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?)",
+      [id,        // obligatorio, no se actualiza
+      clave,
+      titulo,
+      icono ,
+      orden,
+      activo ,
+      default_can_read,
+      default_can_create,
+      default_can_update,
+      default_can_delete,
+      created_at,
+      updated_at,
+      padre_id,
+      ubicacion,
+      url]
     );
 
     const out = rows?.[0]?.[0] || {};
