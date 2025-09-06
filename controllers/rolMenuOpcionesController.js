@@ -43,9 +43,23 @@ exports.obtenerPermisosRol = async (req, res) => {
 };
 
 exports.registrarRolMenu = async (req, res) => {
-    const { rol,menu,view } = req.body;
+    const { p_rol_id,
+p_menu_opcion_id ,
+p_updated_at,
+p_created_at,
+p_can_update,
+p_can_read,
+p_can_delete,
+p_can_create   } = req.body;
  try {
-    const [rows] = await db.query('CALL sp_rol_menu_insert(?,?,?)', [ rol,menu,view  ]);
+    const [rows] = await db.query('CALL sp_rol_menu_opciones_insert(?,?,?,?,?,?,?,?)', [ p_rol_id,
+p_menu_opcion_id ,
+p_updated_at,
+p_created_at,
+p_can_update,
+p_can_read,
+p_can_delete,
+p_can_create    ]);
 
     // Verificamos si no se encontró la categoría
     if (rows[0][0]?.estado === 'ROL_MENÚ') {
