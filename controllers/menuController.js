@@ -14,7 +14,7 @@ exports.obtenerMenus = async (req, res) => {
     const { p_activo } = req.body;
 
  try {
-    const [rows] = await db.query('CALL sp_menus_opciones_get(?)', [  p_activo  ]);
+    const [rows] = await db.query('CALL sp_menus_get(?)', [ p_activo  ]);
 
     // Verificamos si no se encontró la categoría
     if (rows[0][0]?.estado === 'ROL_MENÚ') {

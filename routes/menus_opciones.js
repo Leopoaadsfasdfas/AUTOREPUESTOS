@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const verificarToken = require('../middlewares/verificarToken');
 
-const menusController = require('../controllers/menuController');
+const menusController = require('../controllers/menuopcionesController');
 
 // Listar / obtener uno (query ?id= &activo=)
 router.post('/filtmenu', verificarToken, menusController.obtenerMenus);
