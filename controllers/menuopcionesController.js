@@ -37,11 +37,18 @@ exports.crearMenu = async (req, res) => {
     const {
       clave,
       titulo,
-      url = null,
-      icono = null,
-      padre_id = null,
-      orden = 1,
-      activo = 1
+      icono ,
+      orden= 1,
+      activo = 1,
+      default_can_read= 1,
+      default_can_create= 1,
+      default_can_update= 1,
+      default_can_delete= 1,
+      created_at,
+      updated_at,
+      padre_id,
+      ubicacion=TOP,
+      url
     } = req.body;
 
     if (!clave || !titulo) {
@@ -49,7 +56,7 @@ exports.crearMenu = async (req, res) => {
     }
 
     const [rows] = await db.query(
-      'CALL sp_menus_insert(?, ?, ?, ?, ?, ?, ?)',
+      'CALL sp_menus_insert(?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?)',
       [clave, titulo, url, icono, padre_id, orden, activo]
     );
 
