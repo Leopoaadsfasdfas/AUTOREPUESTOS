@@ -7,6 +7,7 @@ const usuariospermisosController = require('./routes/usuariosPermisos'); // Aqu�
 const menus = require('./routes/menus'); // Aquí importas la ruta de imagen
 const rolMenu = require('./routes/rolMenu'); // Aquí importas la ruta de imagen
 const Menuopciones = require('./routes/menus_opciones'); // Aquí importas la ruta de imagen
+const Menuorolpciones = require('./routes/rolMenuopciones'); // Aquí importas la ruta de imagen
 
 const port = process.env.PORT || 3000; 
 // Configurar CORS (si lo necesitas)
@@ -21,7 +22,7 @@ app.use('/api/permisos', usuariospermisosController);
 app.use('/api/menus', menus);
 app.use('/api/rol_menu', rolMenu); // expone /api/roles/... y /api/permisos/usuario/...
 app.use('/api/menus_opciones', Menuopciones);
-app.use('/api/rol_menu_opciones', Menuopciones);
+app.use('/api/rol_menu_opciones', Menuorolpciones);
 app.listen(port, () => {
   console.log(`Servidor corriendo en puerto ${port}`);
 });
