@@ -47,7 +47,7 @@ exports.crearMenu = async (req, res) => {
       created_at,
       updated_at,
       padre_id,
-      ubicacion=TOP,
+      ubicacion,
       url
     } = req.body;
 
@@ -60,12 +60,12 @@ exports.crearMenu = async (req, res) => {
       [clave,
       titulo,
       icono ,
-      orden= 1,
-      activo = 1,
-      default_can_read= 1,
-      default_can_create= 1,
-      default_can_update= 1,
-      default_can_delete= 1,
+      orden,
+      activo,
+      default_can_read,
+      default_can_create,
+      default_can_update,
+      default_can_delete,
       created_at,
       updated_at,
       padre_id,
