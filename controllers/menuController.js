@@ -17,7 +17,7 @@ exports.obtenerMenus = async (req, res) => {
     const [rows] = await db.query('CALL sp_menus_get(?)', [ p_activo  ]);
 
     // Verificamos si no se encontró la categoría
-    if (rows[0][0]?.estado === 'ROL_MENÚ') {
+    if (rows[0][0]?.estado === 'ROL_MENÚ') { 
       return res.status(404).json({ mensaje: 'mensaje.' });
     }
 
