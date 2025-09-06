@@ -77,9 +77,9 @@ exports.registrarRolMenu = async (req, res) => {
 
 
 exports.eliminarRolMenu = async (req, res) => {
-  const { rol_id} = req.body;
+  const { id} = req.body;
   try {
-    const [rows] = await db.query('CALL sp_rol_menu_opciones_delete(?)', [rol_id]);
+    const [rows] = await db.query('CALL sp_rol_menu_opciones_delete(?)', [id]);
 
     // Verificamos si no se encontró la categoría
     if (rows[0][0]?.estado === 'ROL_MENÚ') {
