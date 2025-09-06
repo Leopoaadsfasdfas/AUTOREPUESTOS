@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const rolMenuController = require('../controllers/rolMenuController');
+const rolMenuController = require('../controllers/rolMenuOpcionesController');
 
 const verificarToken = require('../middlewares/verificarToken');
 

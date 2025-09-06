@@ -80,7 +80,7 @@ exports.eliminarRolMenu = async (req, res) => {
 exports.consultarRolmenu = async (req, res) => {
     const { id_usuario_e } = req.body;
  try {
-    const [rows] = await db.query('CALL sp_menu_rol(?)', [ id_usuario_e  ]);
+    const [rows] = await db.query('CALL sp_menu_opciones_rol(?)', [ id_usuario_e  ]);
 
     // Verificamos si no se encontró la categoría
     if (rows[0][0]?.estado === 'ROL_MENÚ') {
