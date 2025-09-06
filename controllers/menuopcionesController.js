@@ -56,13 +56,39 @@ exports.crearMenu = async (req, res) => {
     }
 
     const [rows] = await db.query(
-      'CALL sp_menus_insert(?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?)',
-      [clave, titulo, url, icono, padre_id, orden, activo]
+      'CALL sp_menus_opciones_insert(?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?)',
+      [clave,
+      titulo,
+      icono ,
+      orden= 1,
+      activo = 1,
+      default_can_read= 1,
+      default_can_create= 1,
+      default_can_update= 1,
+      default_can_delete= 1,
+      created_at,
+      updated_at,
+      padre_id,
+      ubicacion,
+      url]
     );
 
     // sp_menus_insert → SELECT LAST_INSERT_ID() AS id_creado;
     const out = rows[0]?.[0] || {};
-    return res.status(201).json({ id: out.id_creado, clave, titulo, url, icono, padre_id, orden, activo });
+    return res.status(201).json({ id: out.id_creado, clave,
+      titulo,
+      icono ,
+      orden,
+      activo ,
+      default_can_read,
+      default_can_create,
+      default_can_update,
+      default_can_delete,
+      created_at,
+      updated_at,
+      padre_id,
+      ubicacion,
+      url });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
