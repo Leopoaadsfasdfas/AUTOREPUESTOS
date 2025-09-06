@@ -4,8 +4,8 @@ const db = require('../db');
 
 //Consulta Rol
 exports.obtenerRol = async (req, res) => {
-    const { codigo } = req.body;
- try {
+  const { codigo } = req.body;
+  try {
     const [rows] = await db.query('CALL sp_roles_get(?)', [codigo]);
 
     // Verificamos si no se encontró la categoría
@@ -17,7 +17,7 @@ exports.obtenerRol = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-   
+
 };
 /**
  * GET /api/rol-menu
@@ -26,9 +26,9 @@ exports.obtenerRol = async (req, res) => {
  * - onlyViewable: 1 para filtrar solo visibles (opcional)
  */
 exports.obtenerPermisosRol = async (req, res) => {
-    const { codigo } = req.body;
- try {
-    const [rows] = await db.query('CALL sp_rol_menu_get(?)', [codigo ]);
+  const { codigo } = req.body;
+  try {
+    const [rows] = await db.query('CALL sp_rol_menu_get(?)', [codigo]);
 
     // Verificamos si no se encontró la categoría
     if (rows[0][0]?.estado === 'ROL_MENÚ') {
@@ -39,27 +39,29 @@ exports.obtenerPermisosRol = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-   
+
 };
 
 exports.registrarRolMenu = async (req, res) => {
-    const { p_rol_id,
-p_menu_opcion_id ,
-p_updated_at,
-p_created_at,
-p_can_update,
-p_can_read,
-p_can_delete,
-p_can_create   } = req.body;
- try {
-    const [rows] = await db.query('CALL sp_rol_menu_opciones_insert(?,?,?,?,?,?,?,?)', [ p_rol_id,
-p_menu_opcion_id ,
-p_updated_at,
-p_created_at,
-p_can_update,
-p_can_read,
-p_can_delete,
-p_can_create    ]);
+  const {
+    p_rol_id,
+    p_menu_opcion_id,
+    p_updated_at,
+    p_created_at,
+    p_can_update,
+    p_can_read,
+    p_can_delete,
+    p_can_create } = req.body;
+  try {
+    const [rows] = await db.query('CALL sp_rol_menu_opciones_insert(?,?,?,?,?,?,?,?)',
+      [p_rol_id,
+        p_menu_opcion_id,
+        p_updated_at,
+        p_created_at,
+        p_can_update,
+        p_can_read,
+        p_can_delete,
+        p_can_create]);
 
     // Verificamos si no se encontró la categoría
     if (rows[0][0]?.estado === 'ROL_MENÚ') {
@@ -70,14 +72,14 @@ p_can_create    ]);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-   
+
 };
 
 
 exports.eliminarRolMenu = async (req, res) => {
-    const { rol,menu,view } = req.body;
- try {
-    const [rows] = await db.query('CALL sp_rol_menu_delete(?,?,?)', [ rol,menu,view  ]);
+  const { rol_id} = req.body;
+  try {
+    const [rows] = await db.query('CALL sp_rol_menu_opciones_delete(?)', [rol_id]);
 
     // Verificamos si no se encontró la categoría
     if (rows[0][0]?.estado === 'ROL_MENÚ') {
@@ -88,13 +90,13 @@ exports.eliminarRolMenu = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-   
+
 };
 
 exports.consultarRolmenu = async (req, res) => {
-    const { id_usuario_e } = req.body;
- try {
-    const [rows] = await db.query('CALL sp_menu_opciones_rol(?)', [ id_usuario_e  ]);
+  const { id_usuario_e } = req.body;
+  try {
+    const [rows] = await db.query('CALL sp_menu_opciones_rol(?)', [id_usuario_e]);
 
     // Verificamos si no se encontró la categoría
     if (rows[0][0]?.estado === 'ROL_MENÚ') {
@@ -105,5 +107,5 @@ exports.consultarRolmenu = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-   
+
 };
