@@ -177,7 +177,7 @@ exports.eliminarMenu = async (req, res) => {
 
     res.json({
       ok: true,
-      filas_afectadas: out.filas_afectadas ?? 0
+      filas_afectadas: out.filas_afectadas ?? 0 
     });
   } catch (err) {
     const msg = err?.sqlMessage || err?.message || 'Error interno';
