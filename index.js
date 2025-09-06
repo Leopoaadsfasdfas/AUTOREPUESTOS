@@ -21,6 +21,7 @@ app.use('/api/permisos', usuariospermisosController);
 app.use('/api/menus', menus);
 app.use('/api/rol_menu', rolMenu); // expone /api/roles/... y /api/permisos/usuario/...
 app.use('/api/menus_opciones', Menuopciones);
+app.use('/api/rol_menu_opciones', Menuopciones);
 app.listen(port, () => {
   console.log(`Servidor corriendo en puerto ${port}`);
 });
