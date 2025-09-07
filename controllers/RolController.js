@@ -14,7 +14,7 @@ exports.crearRoles = async (req, res) => {
     nombre
     } = req.body;
 
-    if (!clave || !titulo) {
+    if (!nombre ) {
       return res.status(400).json({ error: 'clave y titulo son obligatorios' });
     }
 
