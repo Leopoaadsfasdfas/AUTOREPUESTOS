@@ -11,7 +11,6 @@ const db = require('../db');
 exports.crearRoles = async (req, res) => {
   try {
     const {
-    p_id,
     nombre
     } = req.body;
 
@@ -20,7 +19,7 @@ exports.crearRoles = async (req, res) => {
     }
 
     const [rows] = await db.query(
-      'CALL sp_roles_insert(?, ?)',
+      'CALL sp_roles_insert(?)',
       [p_id,nombre]
     );
 
