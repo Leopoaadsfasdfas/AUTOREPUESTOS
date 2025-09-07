@@ -8,6 +8,7 @@ const menus = require('./routes/menus'); // Aquí importas la ruta de imagen
 const rolMenu = require('./routes/rolMenu'); // Aquí importas la ruta de imagen
 const Menuopciones = require('./routes/menus_opciones'); // Aquí importas la ruta de imagen
 const Menuorolpciones = require('./routes/rolMenuopciones'); // Aquí importas la ruta de imagen
+const roles = require('./routes/roles'); // Aquí importas la ruta de imagen
 
 const port = process.env.PORT || 3000; 
 // Configurar CORS (si lo necesitas)
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 // Usar los routers para cada ruta
+app.use('/api/roles', roles);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/permisos', usuariospermisosController);
 // Rutas
