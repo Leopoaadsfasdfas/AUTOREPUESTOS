@@ -46,7 +46,7 @@ exports.actualizarRoles = async (req, res) => {
     // Llamada al procedimiento almacenado simple
     const [rows] = await db.query(
       "CALL sp_roles_update(?,?)",
-      [p_id, clave ,p_nombre]
+      [p_id ,p_nombre]
     );
 
     const out = rows?.[0]?.[0] || {};
