@@ -41,12 +41,10 @@ exports.actualizarRoles = async (req, res) => {
       p_id,        // obligatorio, no se actualiza
      p_nombre
     } = req.body;
-
    
     // Llamada al procedimiento almacenado simple
     const [rows] = await db.query(
-      "CALL sp_roles_update(?,?)",
-      [p_id ,p_nombre]
+      "CALL sp_roles_update(?,?)",  [p_id ,p_nombre]
     );
 
     const out = rows?.[0]?.[0] || {};
