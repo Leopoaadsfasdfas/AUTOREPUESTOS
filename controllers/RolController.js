@@ -25,7 +25,7 @@ exports.crearRoles = async (req, res) => {
 
     // sp_menus_insert → SELECT LAST_INSERT_ID() AS id_creado;
     const out = rows[0]?.[0] || {};
-    return res.status(201).json({ id: out.id_creado, clave, titulo, url, icono, padre_id, orden, activo });
+    return res.status(201).json({ id: out.id_creado, nombre });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
