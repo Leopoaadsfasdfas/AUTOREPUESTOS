@@ -5,8 +5,6 @@ const verificarToken = require('../middlewares/verificarToken');
 
 const menusController = require('../controllers/RolController');
 
-// Listar / obtener uno (query ?id= &activo=)
-router.post('/filtmenu', verificarToken, menusController.obtenerRoles);
 
 // Crear
 router.post('/', verificarToken, menusController.crearRoles);
