@@ -20,7 +20,7 @@ exports.crearRoles = async (req, res) => {
 
     const [rows] = await db.query(
       'CALL sp_roles_insert(?)',
-      [p_id,nombre]
+      [nombre]
     );
 
     // sp_menus_insert → SELECT LAST_INSERT_ID() AS id_creado;
