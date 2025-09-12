@@ -114,13 +114,8 @@ exports.eliminarMenu = async (req, res) => {
   try {
     const p_id = Number(req.body.id);
 
-    if (!p_id) {
-      return res.status(400).json({ error: 'id inválido' });
-    }
-
     const [rows] = await db.query('CALL sp_menus_delete(?)', [p_id]);
     const out = rows?.[0]?.[0] || {};
-
     res.json({
       ok: true,
       filas_afectadas: out.filas_afectadas ?? 0
