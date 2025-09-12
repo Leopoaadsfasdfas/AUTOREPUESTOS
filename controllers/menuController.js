@@ -112,25 +112,17 @@ exports.actualizarMenu = async (req, res) => {
  */
 exports.eliminarMenu = async (req, res) => {
   try {
-    const p_id = Number(req.body.id);
+    const {p_id
+    } = req.body;
 
-    const [rows] = await db.query('CALL sp_menus_delete(?)', [p_id]);
-    const out = rows?.[0]?.[0] || {};
-    res.json({
-      ok: true,
-      filas_afectadas: out.filas_afectadas ?? 0
-    });
+    const [rows] = await db.query(
+      'CALL sp_menus_delete(?)',
+      [p_id]
+    );
+
+    const out = rows[0]?.[0] || {};
+    return res.status(201).json({ p_id});
   } catch (err) {
-    const msg = err?.sqlMessage || err?.message || 'Error interno';
-
-    if (msg.includes('no es posible eliminar posee submenus')) {
-      return res.status(409).json({ error: 'no es posible eliminar posee submenus' });
-    }
-    if (msg.includes('Menu no existe')) {
-      return res.status(404).json({ error: 'Menu no existe' });
-    }
-
-    res.status(500).json({ error: msg });
+    return res.status(500).json({ error: err.message });
   }
 };
-
